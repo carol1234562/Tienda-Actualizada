@@ -1,5 +1,7 @@
 package main;
 
+import java.util.ArrayList;
+import java.util.List;
 import model.Product;
 import model.Sale;
 import java.util.Scanner;
@@ -7,15 +9,16 @@ import java.util.Scanner;
 public class Shop {
 
     private double cash = 100.00;
-    private Product[] inventory;
+    private List<Product> inventory;        
     private int numberProducts;
-    private Sale[] sales;
+    private List<Sale> sales;
+    
 
     final static double TAX_RATE = 1.04;
 
     public Shop() {
-        inventory = new Product[10];
-        sales = new Sale[10];
+        inventory = new ArrayList<>();
+        sales = new ArrayList<>();
     }
 
     public static void main(String[] args) {
@@ -88,10 +91,11 @@ public class Shop {
      * load initial inventory to shop
      */
     public void loadInventory() {
-        addProduct(new Product("Manzana", 10.00, true, 10));
-        addProduct(new Product("Pera", 20.00, true, 20));
-        addProduct(new Product("Hamburguesa", 30.00, true, 30));
-        addProduct(new Product("Fresa", 5.00, true, 20));
+        //
+        inventory.add(new Product("Manzana", 10.00, true, 10));
+        inventory.add(new Product("Pera", 20.00, true, 20));
+        inventory.add(new Product("Hamburguesa", 30.00, true, 30));
+        inventory.add(new Product("Fresa", 5.00, true, 20));
     }
 
     /**
@@ -124,7 +128,7 @@ public class Shop {
         System.out.print("Stock: ");
         int stock = scanner.nextInt();
         Product newProduct = new Product(name, wholesalerPrice, true, stock);
-        addProduct(newProduct);
+        inventory.add(newProduct);
         System.out.println("Producto agregado correctamente.");
     }
 
@@ -221,20 +225,9 @@ public class Shop {
         amount = amount * TAX_RATE;
         cash += amount;
         System.out.println("Venta realizada con exito, total: " + amount);
+        sales.add(new Sale(client, amount));
 
-        boolean saleRecorded = false;
-        for (int i = 0; i < sales.length; i++) {
-            if (sales[i] == null) {
-                sales[i] = new Sale(client, amount);
-                saleRecorded = true;
-                break;
-            }
-        }
-        if (!saleRecorded) {
-            System.out.println("No se pudo realizar la venta");
-        }
     }
-
     /**
      * show all sales
      */
@@ -262,14 +255,6 @@ public class Shop {
      *
      * @param product
      */
-    public void addProduct(Product product) {
-        if (isInventoryFull()) {
-            System.out.println("No se pueden a\u00f1adir mas productos, se ha alcanzado el maximo de " + inventory.length);
-            return;
-        }
-        inventory[numberProducts] = product;
-        numberProducts++;
-    }
 
     /**
      * check if inventory is full or not

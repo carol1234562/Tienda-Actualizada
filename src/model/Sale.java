@@ -1,6 +1,5 @@
 package model;
 
-import java.util.Arrays;
 
 public class Sale {
 	String client;
