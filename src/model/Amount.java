@@ -10,14 +10,15 @@ package model;
  * @author hanks
  */
 public class Amount {
-   private int value; 
+   private double value; 
+   //esto hace que indique que es euro
    private String currency = "euro"; 
 
-    public Amount(int value) {
+    public Amount(double value) {
         this.value = value;
     }
 
-    public int getValue() {
+    public double getValue() {
         return value;
     }
 

@@ -9,7 +9,7 @@ public class Product {
     private int stock;
     private static int totalProducts;
     
-    public static double EXPIRATION_RATE = 0.60;
+public static double EXPIRATION_RATE = 0.60;
 
     public Product(String name, double wholesalerPrice, boolean available, int stock) {
         super();
@@ -78,8 +78,9 @@ public class Product {
         Product.totalProducts = totalProducts;
     }
 
-    public void expire() {
+    public double expire() {
         this.publicPrice = this.getPublicPrice() * EXPIRATION_RATE;
+        return publicPrice; 
     }
 
     public void setAvailabe(boolean b) {
