@@ -7,12 +7,14 @@ import model.Sale;
 import java.util.Scanner;
 import model.Amount;
 import model.Client;
-import model.Person;
 import model.Employee;
 
 public class Shop {
-//cambio de array a arraylist 
 
+    ////crearemos un arraylist para tener 2 usuarios de prueba 
+//
+//    private List<Client> clients = new ArrayList<>();
+//cambio de array a arraylist 
     private double cash = 100.00;
     private List<Product> inventory;
     private int numberProducts;
@@ -23,12 +25,15 @@ public class Shop {
     private Amount amount;
 
     public Shop() {
+//        //creamos 2 usuarios de prueba 
+//        clients.add(new Client(1, new Amount(Client.BALANCE), 1, "Rosa", "1234"));
+//        clients.add(new Client(1, new Amount(Client.BALANCE), 2, "Juan", "1234"));
         //sin limite en inventario 
         inventory = new ArrayList<>();
         sales = new ArrayList<>();
         scanner = new Scanner(System.in);
     }
-   
+
     public boolean initSession() {
 
         Logable emp = new Employee(123, "test", "test");
@@ -222,12 +227,10 @@ public class Shop {
     /**
      * make a sale of products to a client
      */
-    public void sale(){
-        // ask for client name
-        scanner.nextLine();
-        System.out.println("Realizar venta, escribir nombre cliente");
-        String client = scanner.nextLine();
-
+    public void sale() {
+        System.out.println("Ingrese el nombre del cliente:");
+        String nombreCliente = scanner.nextLine();
+        Client cliente = new Client(Client.MEMBER_ID, new Amount(Client.BALANCE), "Tester");
         // sale product until input name is not 0
         double monto = 0.0;
         String name = "";
@@ -256,10 +259,23 @@ public class Shop {
 
         // show cost total
         monto = monto * TAX_RATE;
-        cash += monto;
-        System.out.println("Venta realizada con exito, total: " + monto);
-        sales.add(new Sale(client, monto));
+        Amount finalMonto = new Amount(monto);
+        boolean pagoExitoso = cliente.pay(finalMonto);
+        if (pagoExitoso) {
+            System.out.println("Pago realizado con éxito. Saldo restante: " + cliente.getBalance().getValue() + " ?");
+        } else {
+            System.out.println("Pago realizado, pero saldo insuficiente. Deuda pendiente: "
+                    + Math.abs(cliente.getBalance().getValue()) + " ?");
+        }
 
+        // Registrar venta
+        sales.add(new Sale(cliente.getName(), monto));
+
+        // Actualizar caja
+        cash += monto;
+
+        // Mostrar total
+        System.out.println("Venta realizada con éxito, total: " + totalCompra.getValue() + " ?");
     }
 
     /**
