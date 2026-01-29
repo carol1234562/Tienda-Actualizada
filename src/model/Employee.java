@@ -3,12 +3,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package model;
+import main.Logable;
 
 /**
  *
  * @author hanks
  */
-public class Employee extends Person {
+public class Employee extends Person implements Logable {
 
     public Employee(int id, String name, String contraseña) {
         super(id, name, contraseña);

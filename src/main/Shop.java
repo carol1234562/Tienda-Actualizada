@@ -28,10 +28,10 @@ public class Shop {
         sales = new ArrayList<>();
         scanner = new Scanner(System.in);
     }
-
+   
     public boolean initSession() {
 
-        Person emp = new Employee(123, "test", "test");
+        Logable emp = new Employee(123, "test", "test");
 
         System.out.println("===========================");
         System.out.println("-----INICIO DE SESION-----");
@@ -222,7 +222,7 @@ public class Shop {
     /**
      * make a sale of products to a client
      */
-    public void sale() {
+    public void sale(){
         // ask for client name
         scanner.nextLine();
         System.out.println("Realizar venta, escribir nombre cliente");
