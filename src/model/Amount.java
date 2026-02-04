@@ -12,7 +12,7 @@ package model;
 public class Amount {
    private double value; 
    //esto hace que indique que es euro
-   private String currency = "euro"; 
+   private String currency = " euro "; 
 
     public Amount(double value) {
         this.value = value;
@@ -32,6 +32,11 @@ public class Amount {
 
     public void setCurrency(String currency) {
         this.currency = currency;
+    }
+
+    @Override
+    public String toString() {
+        return  value + " " + currency ;
     }
 
     
