@@ -36,27 +36,29 @@ public class Shop {
 
     public boolean initSession() {
 
-        Logable emp = new Employee(123, "test", "test");
+        Logable emp = new Employee();
+        boolean loggedIn = false;
+        while (!loggedIn) {
+            System.out.println("===========================");
+            System.out.println("-----INICIO DE SESION-----");
+            System.out.println("===========================");
 
-        System.out.println("===========================");
-        System.out.println("-----INICIO DE SESION-----");
-        System.out.println("===========================");
+            System.out.println("Ingrese ID de usuario: ");
+            int i = scanner.nextInt();
+            scanner.nextLine();
+            System.out.println("Nombre de usuario: ");
+            String user = scanner.nextLine();
+            System.out.println("Ingrese contraseña: ");
+            String contra = scanner.nextLine();
+            if (emp.login(i, contra)) {
+                System.out.println("Bienvenido " + user);
+                loggedIn = true;
+            } else {
+                System.out.println("Datos incorrectos");
 
-        System.out.println("Ingrese ID de usuario: ");
-        int i = scanner.nextInt();
-        scanner.nextLine();
-        System.out.println("Nombre de usuario: ");
-        String user = scanner.nextLine();
-        System.out.println("Ingrese contraseña: ");
-        String contra = scanner.nextLine();
-
-        if (!emp.login(i, user, contra)) {
-            System.out.println("Datos incorrectos");
-            return false;
-        } else {
-            System.out.println("Bienvenido " + user);
-            return true;
+            }
         }
+        return false;
     }
 
     public static void main(String[] args) {
@@ -68,8 +70,8 @@ public class Shop {
 //            return;
 //        }
         //creación de bucle 
-        boolean login = false;
-        while (!login) {
+        boolean login = true;
+        while (login) {
             login = shop.initSession();
         }
         //cargar productos 
@@ -82,16 +84,16 @@ public class Shop {
             System.out.println("===========================");
             System.out.println("Menu principal miTienda.com");
             System.out.println("===========================");
-            System.out.println("1) Contar caja");
-            System.out.println("2) A\u00f1adir producto");
-            System.out.println("3) A\u00f1adir stock");
-            System.out.println("4) Marcar producto proxima caducidad");
-            System.out.println("5) Ver inventario");
-            System.out.println("6) Venta");
-            System.out.println("7) Ver ventas");
-            System.out.println("8) Monto total de ventas");
-            System.out.println("9) Eliminar producto");
-            System.out.println("10) Salir programa");
+            System.out.println("1) Contar caja: ");
+            System.out.println("2) A\u00f1adir producto: ");
+            System.out.println("3) A\u00f1adir stock: ");
+            System.out.println("4) Marcar producto proxima caducidad: ");
+            System.out.println("5) Ver inventario: ");
+            System.out.println("6) Venta: ");
+            System.out.println("7) Ver ventas: ");
+            System.out.println("8) Monto total de ventas: ");
+            System.out.println("9) Eliminar producto: ");
+            System.out.println("10) Salir programa: ");
             System.out.println("Seleccione una opcion: ");
             opcion = scanner.nextInt();
             scanner.nextLine();
@@ -160,7 +162,7 @@ public class Shop {
         Product existingProduct = findProduct(name);
 
         if (existingProduct != null && existingProduct.getName().equalsIgnoreCase(name)) {
-            System.out.println("El producto ya existe en el sistema.");
+            System.out.println("El producto ya existe en el sistema. ");
             return;
         }
         System.out.print("Precio mayorista: ");
@@ -170,7 +172,7 @@ public class Shop {
         scanner.nextLine();
         Product newProduct = new Product(name, wholesalerPrice, true, stock);
         inventory.add(newProduct);
-        System.out.println("Producto agregado correctamente.");
+        System.out.println("Producto agregado correctamente. ");
     }
 
     /**
@@ -208,7 +210,7 @@ public class Shop {
             System.out.println("El precio del producto " + name + " ha sido actualizado a " + precioFinal);
             existingProduct.setPublicPrice(precioFinal);
         } else {
-            System.out.println("Producto no encontrado.");
+            System.out.println("Producto no encontrado. ");
         }
     }
 
@@ -216,7 +218,7 @@ public class Shop {
      * show all inventory
      */
     public void showInventory() {
-        System.out.println("Contenido actual de la tienda:");
+        System.out.println("Contenido actual de la tienda: ");
         for (Product product : inventory) {
             if (product != null) {
                 System.out.println(product);
@@ -228,10 +230,12 @@ public class Shop {
      * make a sale of products to a client
      */
     public void sale() {
+        scanner.nextLine();
         System.out.println("Ingrese el nombre del cliente:");
-        String nombreCliente = scanner.nextLine();
-        Client cliente = new Client(Client.MEMBER_ID, new Amount(Client.BALANCE), "Tester");
+        String nombre = scanner.nextLine();
+        Client cliente = new Client(nombre);
         // sale product until input name is not 0
+        ArrayList<Product> productosVendidos = new ArrayList<>();
         double monto = 0.0;
         String name = "";
         while (!name.equals("0")) {
@@ -241,48 +245,47 @@ public class Shop {
             if (name.equals("0")) {
                 break;
             }
-            Product existingProduct = findProduct(name);
-            if (existingProduct == null || !existingProduct.isAvailable() || existingProduct.getStock() <= 0) {
+            Product p = findProduct(name);
+            if (p == null || !p.isAvailable() || p.getStock() <= 0) {
                 System.out.println("Producto no encontrado o sin stock");
                 continue;
             }
 
-            existingProduct.setStock(existingProduct.getStock() - 1);
-            monto += existingProduct.getPublicPrice();
+            p.setStock(p.getStock() - 1);
+            monto += p.getPublicPrice();
 
             // if no more stock, set as not available to sale
-            if (existingProduct.getStock() == 0) {
-                existingProduct.setAvailable(false);
+            if (p.getStock() == 0) {
+                p.setAvailable(false);
             }
+            productosVendidos.add(p);
+            monto += p.getPublicPrice();
             System.out.println("Producto a\u00f1adido con Ã©xito");
         }
 
         // show cost total
+        //aplicando impuesto
         monto = monto * TAX_RATE;
-        Amount finalMonto = new Amount(monto);
-        boolean pagoExitoso = cliente.pay(finalMonto);
-        if (pagoExitoso) {
-            System.out.println("Pago realizado con éxito. Saldo restante: " + cliente.getBalance().getValue() + " ?");
+        Amount finalmont = new Amount(monto);
+        boolean pagoOk = cliente.pay(finalmont);
+
+        Sale sale = new Sale(cliente, productosVendidos, monto);
+        sales.add(sale);
+        if (pagoOk) {
+            System.out.println("Venta realizada. ");
+            System.out.println("Saldo restante " + cliente.getBalance().getValue());
         } else {
-            System.out.println("Pago realizado, pero saldo insuficiente. Deuda pendiente: "
-                    + Math.abs(cliente.getBalance().getValue()) + " ?");
+            System.out.println("Venta realizada, queda deuda pendiente. ");
+            System.out.println("Deuda Actual: " + cliente.getBalance().getValue());
         }
 
-        // Registrar venta
-        sales.add(new Sale(cliente.getName(), monto));
-
-        // Actualizar caja
-        cash += monto;
-
-        // Mostrar total
-        System.out.println("Venta realizada con éxito, total: " + totalCompra.getValue() + " ?");
     }
 
     /**
      * show all sales
      */
     private void showSales() {
-        System.out.println("Lista de ventas:");
+        System.out.println("Lista de ventas: ");
         for (Sale sale : sales) {
             if (sale != null) {
                 System.out.println(sale);
@@ -341,11 +344,11 @@ public class Shop {
             String ans = scanner.nextLine();
             if (ans.equalsIgnoreCase("YES")) {
                 inventory.remove(productEliminado);
-                System.out.println("Producto eliminado con éxito");
+                System.out.println("Producto eliminado con éxito: ");
                 //opcional
                 return productEliminado;
             } else {
-                System.out.println("Operación cancelada");
+                System.out.println("Operación cancelada: ");
                 //opcional 
                 return null;
             }
