@@ -10,6 +10,6 @@ package main;
  * @author hanks
  */
 public interface Logable {
-        boolean login(int id, String name, String contraseña);
+        boolean login(int id,String contraseña);
 }
 

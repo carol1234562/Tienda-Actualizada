@@ -89,7 +89,12 @@ public static double EXPIRATION_RATE = 0.60;
 
     @Override
     public String toString() {
-        return "Id: " + id + "  | Product: " + name + " | Price: " + publicPrice + " | Stock: " + stock + " |  Disponibilidad: " + available + " |   Precio Mayorista: " + wholesalerPrice + ".";
+        return "Id: " + id 
+                + " | PRODUCT: " + name 
+                + " | PRICE: " + publicPrice 
+                + " | STOCK: " + stock 
+                + " | DISPONIBILIDAD: " + available 
+                + " | PRECIO MAYORISTA: " + wholesalerPrice + ".";
     }
    
 }

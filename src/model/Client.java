@@ -17,29 +17,23 @@ public class Client extends Person implements Payable {
     public static final int MEMBER_ID =456; 
     public static final double BALANCE = 50.00; 
     
-  public Client(int menberid, Amount balance, int id, String name, String contraseña) {
-        super(id, name, contraseña);
+  public Client(String name) {
+        super(name);
         this.menberid = MEMBER_ID;
-        this.balance = new Amount ((int) BALANCE);
+        this.balance = new Amount(BALANCE);
     }
-    public boolean pay (Amount amount){
-      double saldoActual = balance.getValue();
-      //declaramos 
-      double nuevoSaldo = saldoActual - amount.getValue(); 
-      balance.setValue(nuevoSaldo);
-      
-      if (nuevoSaldo < 0 ){
-          System.out.println("Queda una deuda de " + nuevoSaldo + "euros.");
-          return false; 
-      }else {
-          return true; 
-      }
+    @Override
+    public boolean pay(Amount amount){
+        double nuevoSaldo = balance.getValue() - amount.getValue();
+        balance.setValue(nuevoSaldo);
+        return nuevoSaldo >=0; 
     }
+
     public int getMenberid() {
         return menberid;
     }
 
-    public void setMenberld(int menberid) {
+    public void setMenberid(int menberid) {
         this.menberid = menberid;
     }
 
@@ -50,4 +44,10 @@ public class Client extends Person implements Payable {
     public void setBalance(Amount balance) {
         this.balance = balance;
     }
+
+    @Override
+    public String toString() {
+        return "ID = " + menberid + ", Total = " + balance + " , " ;
+    }
+    
 }

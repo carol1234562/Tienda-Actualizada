@@ -10,16 +10,17 @@ import main.Logable;
  * @author hanks
  */
 public class Employee extends Person implements Logable {
-
-    public Employee(int id, String name, String contraseña) {
-        super(id, name, contraseña);
+ 
+    public static final int EMPLOYEE_ID = 123;
+    public static final String PASSWORD = "test"; 
+     public Employee() {
+        super("empleado");
     }
 
     @Override
-    public boolean login(int id, String name, String contraseña) {
-        return this.id == (id)
-                && this.name.equalsIgnoreCase(name)
-                && this.contraseña.equalsIgnoreCase(contraseña);
-    }
+    public boolean login(int id, String contraseña) {
+                return id == EMPLOYEE_ID 
+                        && contraseña.equalsIgnoreCase(PASSWORD);
 
+    }
 }
