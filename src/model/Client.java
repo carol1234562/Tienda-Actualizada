@@ -47,7 +47,7 @@ public class Client extends Person implements Payable {
 
     @Override
     public String toString() {
-        return "ID = " + menberid + ", Total = " + balance + " , " ;
+        return "ID = " + menberid + ", Saldo restante = " + balance + " , " ;
     }
     
 }

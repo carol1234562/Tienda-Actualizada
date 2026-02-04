@@ -259,7 +259,6 @@ public class Shop {
                 p.setAvailable(false);
             }
             productosVendidos.add(p);
-            monto += p.getPublicPrice();
             System.out.println("Producto a\u00f1adido con Ã©xito");
         }
 
@@ -285,12 +284,31 @@ public class Shop {
      * show all sales
      */
     private void showSales() {
-        System.out.println("Lista de ventas: ");
+        System.out.println("      LISTA DE VENTAS      ");
+        if (sales.isEmpty()) {
+            System.out.println("No se han registrado ventas aún.");
+            return;
+        }
+
+        int contador = 1;
         for (Sale sale : sales) {
             if (sale != null) {
-                System.out.println(sale);
+                System.out.println("\nVenta #" + contador);
+                System.out.println("---------------------------");
+                System.out.println("Cliente: " + sale.getName());
+                System.out.println("Productos vendidos:");
+
+                for (Product p : sale.getProducts()) {
+                    System.out.println(" - " + p.getName());
+                    System.out.println("Precio: " + p.getPublicPrice());
+                }
+
+                System.out.println("Total de la venta(con impuesto): " + sale.getAmount());
+                contador++;
             }
         }
+
+        System.out.println("\n===========================");
     }
 
     private void finalSales() {
